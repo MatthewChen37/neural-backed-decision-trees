@@ -35,15 +35,15 @@ from nbdt.utils import (
 
 maybe_install_wordnet()
 
-datasets = ('CIFAR10', 'CIFAR100') + data.imagenet.names + data.custom.names
+datasets = ('CIFAR10', 'CIFAR100', 'NeuronData') + data.imagenet.names + data.custom.names
 
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR Training')
-parser.add_argument('--batch-size', default=512, type=int,
+parser.add_argument('--batch-size', default=64, type=int,
                     help='Batch size used for training')
 parser.add_argument('--epochs', '-e', default=200, type=int,
                     help='By default, lr schedule is scaled accordingly')
-parser.add_argument('--dataset', default='CIFAR10', choices=datasets)
+parser.add_argument('--dataset', default='NeuronData', choices=datasets)
 parser.add_argument('--arch', default='ResNet18', choices=list(models.get_model_choices()))
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
@@ -98,6 +98,7 @@ if args.dataset in ('TinyImagenet200', 'Imagenet1000'):
     input_size = args.input_size or default_input_size
     transform_train = dataset.transform_train(input_size)
     transform_test = dataset.transform_val(input_size)
+   
 elif args.input_size is not None and args.input_size > 32:
     transform_train = transforms.Compose([
         transforms.Resize(args.input_size + 32),
@@ -124,8 +125,8 @@ testset = dataset(**dataset_kwargs, root='./data', train=False, download=True, t
 
 assert trainset.classes == testset.classes, (trainset.classes, testset.classes)
 
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=2)
-testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=0)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=False, num_workers=0)
 
 Colors.cyan(f'Training with dataset {args.dataset} and {len(trainset.classes)} classes')
 

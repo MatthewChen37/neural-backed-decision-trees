@@ -18,7 +18,7 @@ __all__ = names = ('CIFAR10IncludeLabels',
                    'CIFAR100ExcludeLabels', 'TinyImagenet200ExcludeLabels',
                    'Imagenet1000ExcludeLabels', 'CIFAR10ResampleLabels',
                    'CIFAR100ResampleLabels', 'TinyImagenet200ResampleLabels',
-                   'Imagenet1000ResampleLabels')
+                   'Imagenet1000ResampleLabels',)
 keys = ('include_labels', 'exclude_labels', 'include_classes', 'probability_labels')
 
 

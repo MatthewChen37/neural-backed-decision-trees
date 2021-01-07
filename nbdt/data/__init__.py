@@ -3,4 +3,5 @@ from .imagenet import *
 from .pascal_context import *
 from .lip import *
 from .ade20k import *
+from .neurondata import *
 from torchvision.datasets import *

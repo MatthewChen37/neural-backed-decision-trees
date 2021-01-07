@@ -12,13 +12,12 @@ import os
 
 maybe_install_wordnet()
 
-datasets = ('CIFAR10', 'CIFAR100', 'Cityscapes') + data.imagenet.names + \
-    data.custom.names + data.pascal_context.names + data.lip.names + \
-    data.ade20k.names
+datasets = ('CIFAR10', 'CIFAR100', 'Cityscapes', 'NeuronData') + data.imagenet.names + \
+    data.custom.names
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', choices=datasets, default='CIFAR10')
+parser.add_argument('--dataset', choices=datasets, default='neurondata')
 parser.add_argument('--root', default='./nbdt/wnids')
 data.custom.add_arguments(parser)
 args = parser.parse_args()
