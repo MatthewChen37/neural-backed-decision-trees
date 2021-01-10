@@ -9,6 +9,7 @@ def main():
 
     parser = get_parser()
     args = parser.parse_args()
+    
 
     if not args.path:
         maybe_install_wordnet()

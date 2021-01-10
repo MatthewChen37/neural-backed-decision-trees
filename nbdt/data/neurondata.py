@@ -12,7 +12,6 @@ import torchvision.transforms as transforms
 from torch.utils.data import Dataset
 
 
-
 __all__ = names = ('NeuronData',)
 
 

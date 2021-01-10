@@ -1,0 +1,1 @@
+{"directed": true, "multigraph": false, "graph": {}, "nodes": [{"label": "visual_area", "id": "n05490204"}, {"label": "striate_cortex", "id": "n05494617"}, {"label": "cortical_area", "id": "n05486920"}], "links": [{"source": "n05486920", "target": "n05490204"}, {"source": "n05486920", "target": "n05494617"}]}

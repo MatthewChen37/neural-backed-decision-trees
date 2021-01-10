@@ -24,10 +24,14 @@ from nbdt import data, analysis, loss, models
 
 import torchvision
 import torchvision.transforms as transforms
+from sklearn.model_selection import KFold
+
 
 import os
+from sys import exit
 import argparse
 import numpy as np
+from nbdt.utils import DATASET_TO_CLASSES
 
 from nbdt.utils import (
     progress_bar, generate_fname, generate_kwargs, Colors, maybe_install_wordnet
@@ -41,10 +45,10 @@ datasets = ('CIFAR10', 'CIFAR100', 'NeuronData') + data.imagenet.names + data.cu
 parser = argparse.ArgumentParser(description='PyTorch CIFAR Training')
 parser.add_argument('--batch-size', default=64, type=int,
                     help='Batch size used for training')
-parser.add_argument('--epochs', '-e', default=200, type=int,
+parser.add_argument('--epochs', '-e', default=100, type=int,
                     help='By default, lr schedule is scaled accordingly')
 parser.add_argument('--dataset', default='NeuronData', choices=datasets)
-parser.add_argument('--arch', default='ResNet18', choices=list(models.get_model_choices()))
+parser.add_argument('--arch', default='wrn28_10_cifar10', choices=list(models.get_model_choices()))
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
 
@@ -126,13 +130,14 @@ testset = dataset(**dataset_kwargs, root='./data', train=False, download=True, t
 assert trainset.classes == testset.classes, (trainset.classes, testset.classes)
 
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=0)
-testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=False, num_workers=0)
+testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False, num_workers=0)
 
 Colors.cyan(f'Training with dataset {args.dataset} and {len(trainset.classes)} classes')
 
 # Model
 print('==> Building model..')
 model = getattr(models, args.arch)
+print(type(model))
 model_kwargs = {'num_classes': len(trainset.classes) }
 
 if args.pretrained:
@@ -258,10 +263,13 @@ def test(epoch, analyzer, checkpoint=True):
         for batch_idx, (inputs, targets) in enumerate(testloader):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = net(inputs)
+           
             loss = criterion(outputs, targets)
 
             test_loss += loss.item()
             _, predicted = outputs.max(1)
+            
+        
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
@@ -310,6 +318,7 @@ if args.eval:
     analyzer.start_epoch(0)
     test(0, analyzer, checkpoint=False)
     exit()
+    
 
 for epoch in range(start_epoch, args.epochs):
     analyzer.start_epoch(epoch)
